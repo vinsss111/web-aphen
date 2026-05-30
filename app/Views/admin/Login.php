@@ -106,6 +106,7 @@
         </div>
 
         <form action="<?= base_url('login/proses'); ?>" method="POST" class="mt-4">
+            <?= csrf_field() ?>
             <div class="mb-3">
                 <label class="form-label">Username</label>
                 <div class="input-group">

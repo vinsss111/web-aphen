@@ -442,12 +442,19 @@
         chatContent.scrollTop = chatContent.scrollHeight;
 
         try {
+            // Helper untuk ambil CSRF cookie (nama cookie diset di app/Config/Security.php)
+            function getCookie(name) {
+                const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+                return v ? decodeURIComponent(v[2]) : null;
+            }
+
             // Menembak ke rute internal Vercel yang sudah didaftarkan di Routes.php
             const response = await fetch('<?= base_url("api/chatbot"); ?>', {
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest'
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-CSRF-TOKEN': getCookie('csrf_cookie_name') || ''
                 },
                 // Mengirim data dengan format x-www-form-urlencoded agar terbaca oleh getPost() di CI4
                 body: 'pesan=' + encodeURIComponent(pesan)
@@ -643,9 +650,14 @@
         };
 
         // AJAX request untuk menyimpan pesanan
+        function getCookie(name) {
+            const v = document.cookie.match('(^|;) ?' + name + '=([^;]*)(;|$)');
+            return v ? decodeURIComponent(v[2]) : null;
+        }
+
         fetch('<?= base_url("index/checkout"); ?>', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
+            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCookie('csrf_cookie_name') || '' },
             body: JSON.stringify(checkoutData)
         })
         .then(response => response.json())
