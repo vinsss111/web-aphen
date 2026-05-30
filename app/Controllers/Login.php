@@ -22,7 +22,7 @@ class Login extends BaseController
         if ($this->session->get('id_user')) {
             return redirect()->to('dashboard');
         }
-        return view('admin/login');
+        return view('admin/Login');
     }
 
     public function proses()
@@ -46,23 +46,23 @@ class Login extends BaseController
                 return redirect()->to('dashboard');
             } else {
                 $this->session->setFlashdata('error', 'Password yang Anda masukkan salah!');
-                return redirect()->to('login');
+                return redirect()->to('Login');
             }
         } else {
             $this->session->setFlashdata('error', 'Username tidak ditemukan!');
-            return redirect()->to('login');
+            return redirect()->to('Login');
         }
     }
 
     public function logout()
     {
         $this->session->destroy();
-        return redirect()->to('login');
+        return redirect()->to('Login');
     }
 
     public function reset_password()
     {
-        return view('admin/login_reset');
+        return view('admin/Login_reset');
     }
 
     public function proses_reset()
@@ -82,19 +82,19 @@ class Login extends BaseController
                     $db = \Config\Database::connect();
                     $db->table('users')->where('username', $username)->update(['password' => $password_hash]);
 
-                    $this->session->setFlashdata('sukses', 'Password berhasil diperbarui! Silakan login.');
-                    return redirect()->to('login');
+                    $this->session->setFlashdata('sukses', 'Password berhasil diperbarui! Silakan Login.');
+                    return redirect()->to('Login');
                 } else {
                     $this->session->setFlashdata('error', 'Konfirmasi password baru tidak cocok!');
-                    return redirect()->to('login/reset_password');
+                    return redirect()->to('Login/reset_password');
                 }
             } else {
                 $this->session->setFlashdata('error', 'Password lama salah!');
-                return redirect()->to('login/reset_password');
+                return redirect()->to('Login/reset_password');
             }
         } else {
             $this->session->setFlashdata('error', 'Username tidak ditemukan!');
-            return redirect()->to('login/reset_password');
+            return redirect()->to('Login/reset_password');
         }
     }
 
