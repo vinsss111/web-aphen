@@ -51,7 +51,15 @@ class Database extends Config
     {
         parent::__construct();
 
-        // Mengisi nilai secara dinamis dari Environment Variables Vercel saat class dimuat
+        // Ambil port dan pastikan dikonversi menjadi Integer secara ketat
+        $envPort = getenv('DATABASE_DEFAULT_DBPORT');
+        if ($envPort !== false && $envPort !== '') {
+            $this->default['port'] = (int) $envPort;
+        } else {
+            $this->default['port'] = 4000; // Jalur aman jika env Vercel tidak terbaca
+        }
+
+        // Mengisi nilai string secara dinamis dari Environment Variables Vercel
         if (getenv('DATABASE_DEFAULT_HOSTNAME')) {
             $this->default['hostname'] = getenv('DATABASE_DEFAULT_HOSTNAME');
         }
@@ -66,9 +74,6 @@ class Database extends Config
         }
         if (getenv('DATABASE_DEFAULT_DBDRIVER')) {
             $this->default['DBDriver'] = getenv('DATABASE_DEFAULT_DBDRIVER');
-        }
-        if (getenv('DATABASE_DEFAULT_DBPORT')) {
-            $this->default['port'] = (int) getenv('DATABASE_DEFAULT_DBPORT');
         }
     }
 
