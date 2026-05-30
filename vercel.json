@@ -1,8 +1,15 @@
 {
   "version": 2,
-  "name": "newjayamotor1",
+  "name": "web-aphen",
   "functions": {
-    "api/index.php": { "runtime": "vercel-php@0.7.1" }
+    "api/index.php": {
+      "runtime": "vercel-php@0.7.1",
+      "config": {
+        "maxDuration": 30,
+        "memory": 1024,
+        "phpVersion": "8.2"
+      }
+    }
   },
   "routes": [
     {
