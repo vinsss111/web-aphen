@@ -51,29 +51,28 @@ class Database extends Config
     {
         parent::__construct();
 
-        // Ambil port dan pastikan dikonversi menjadi Integer secara ketat
-        $envPort = getenv('DATABASE_DEFAULT_DBPORT');
-        if ($envPort !== false && $envPort !== '') {
-            $this->default['port'] = (int) $envPort;
-        } else {
-            $this->default['port'] = 4000; // Jalur aman jika env Vercel tidak terbaca
-        }
-
-        // Mengisi nilai string secara dinamis dari Environment Variables Vercel
+        // Bersihkan spasi gaib dan isi kredensial secara dinamis dari Vercel
         if (getenv('DATABASE_DEFAULT_HOSTNAME')) {
-            $this->default['hostname'] = getenv('DATABASE_DEFAULT_HOSTNAME');
+            $this->default['hostname'] = trim(getenv('DATABASE_DEFAULT_HOSTNAME'));
         }
         if (getenv('DATABASE_DEFAULT_USERNAME')) {
-            $this->default['username'] = getenv('DATABASE_DEFAULT_USERNAME');
+            $this->default['username'] = trim(getenv('DATABASE_DEFAULT_USERNAME'));
         }
         if (getenv('DATABASE_DEFAULT_PASSWORD')) {
-            $this->default['password'] = getenv('DATABASE_DEFAULT_PASSWORD');
+            $this->default['password'] = trim(getenv('DATABASE_DEFAULT_PASSWORD'));
         }
         if (getenv('DATABASE_DEFAULT_DATABASE')) {
-            $this->default['database'] = getenv('DATABASE_DEFAULT_DATABASE');
+            $this->default['database'] = trim(getenv('DATABASE_DEFAULT_DATABASE'));
         }
         if (getenv('DATABASE_DEFAULT_DBDRIVER')) {
-            $this->default['DBDriver'] = getenv('DATABASE_DEFAULT_DBDRIVER');
+            $this->default['DBDriver'] = trim(getenv('DATABASE_DEFAULT_DBDRIVER'));
+        }
+        
+        $envPort = getenv('DATABASE_DEFAULT_DBPORT');
+        if ($envPort !== false && $envPort !== '') {
+            $this->default['port'] = (int) trim($envPort);
+        } else {
+            $this->default['port'] = 4000;
         }
     }
 
