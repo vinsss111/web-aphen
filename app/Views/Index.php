@@ -436,33 +436,33 @@
         const pesan = inputPesan.value.trim();
         if (!pesan) return;
 
-        // Tampilkan pesan user
+        // Tampilkan pesan user ke layar chat
         chatContent.innerHTML += `<div class="text-end mb-2"><span class="bg-white p-2 rounded shadow-sm d-inline-block text-dark">${pesan}</span></div>`;
         inputPesan.value = '';
         chatContent.scrollTop = chatContent.scrollHeight;
 
         try {
-            const response = await fetch('<?= base_url('api/chatbot'); ?>', {
+            // Menembak ke rute internal Vercel yang sudah didaftarkan di Routes.php
+            const response = await fetch('<?= base_url("api/chatbot"); ?>', {
                 method: 'POST',
-                headers: {
+                headers: { 
                     'Content-Type': 'application/x-www-form-urlencoded',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'Accept': 'application/json'
+                    'X-Requested-With': 'XMLHttpRequest'
                 },
-                body: new URLSearchParams({ pesan })
+                // Mengirim data dengan format x-www-form-urlencoded agar terbaca oleh getPost() di CI4
+                body: 'pesan=' + encodeURIComponent(pesan)
             });
             
-            if (!response.ok) {
-                const errorText = await response.text();
-                throw new Error(errorText || 'Server error');
-            }
+            if (!response.ok) throw new Error('Server error');
             
             const data = await response.json();
             
+            // Tampilkan balasan otomatis dari Controller Chatbot.php
             chatContent.innerHTML += `<div class="mb-2"><strong>Bot:</strong> <span class="bg-danger text-white p-2 rounded shadow-sm d-inline-block">${data.balasan}</span></div>`;
             chatContent.scrollTop = chatContent.scrollHeight;
         } catch (err) {
-            chatContent.innerHTML += `<div class="text-center small text-muted">Bot sedang offline. ${err.message}</div>`;
+            console.error('Error Chatbot:', err);
+            chatContent.innerHTML += `<div class="text-center small text-muted">Bot sedang tidak merespon...</div>`;
             chatContent.scrollTop = chatContent.scrollHeight;
         }
     }
