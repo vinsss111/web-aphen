@@ -57,25 +57,34 @@ class Paths
 
     public function __construct()
     {
-        // Jika dijalankan di Vercel (serverless), filesystem project biasanya bersifat read-only.
-        // Gunakan direktori sementara yang dapat ditulis oleh runtime (biasanya /tmp).
-        if (getenv('VERCEL') !== false || getenv('VERCEL_GIT_COMMIT_SHA') !== false) {
-            $this->writableDirectory = rtrim(sys_get_temp_dir(), "\/\\") . DIRECTORY_SEPARATOR . 'writable';
+        // Jika direktori writable repo tidak bisa ditulis oleh runtime, pakai /tmp/writable.
+        $tempWritable = rtrim(sys_get_temp_dir(), "\/\\") . DIRECTORY_SEPARATOR . 'writable';
+        $useTemp = false;
 
-            // Pastikan subdirektori yang dibutuhkan CodeIgniter ada dan bisa ditulis.
-            $needed = [
-                $this->writableDirectory,
-                $this->writableDirectory . DIRECTORY_SEPARATOR . 'cache',
-                $this->writableDirectory . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'renderer',
-                $this->writableDirectory . DIRECTORY_SEPARATOR . 'logs',
-                $this->writableDirectory . DIRECTORY_SEPARATOR . 'session',
-                $this->writableDirectory . DIRECTORY_SEPARATOR . 'uploads',
-            ];
+        if (getenv('VERCEL') !== false || getenv('VERCEL_GIT_COMMIT_SHA') !== false || getenv('VERCEL_ENV') !== false) {
+            $useTemp = true;
+        }
 
-            foreach ($needed as $dir) {
-                if (!is_dir($dir)) {
-                    @mkdir($dir, 0777, true);
-                }
+        if (! $useTemp && ! is_writable($this->writableDirectory)) {
+            $useTemp = true;
+        }
+
+        if ($useTemp) {
+            $this->writableDirectory = $tempWritable;
+        }
+
+        $needed = [
+            $this->writableDirectory,
+            $this->writableDirectory . DIRECTORY_SEPARATOR . 'cache',
+            $this->writableDirectory . DIRECTORY_SEPARATOR . 'cache' . DIRECTORY_SEPARATOR . 'renderer',
+            $this->writableDirectory . DIRECTORY_SEPARATOR . 'logs',
+            $this->writableDirectory . DIRECTORY_SEPARATOR . 'session',
+            $this->writableDirectory . DIRECTORY_SEPARATOR . 'uploads',
+        ];
+
+        foreach ($needed as $dir) {
+            if (! is_dir($dir)) {
+                @mkdir($dir, 0777, true);
             }
         }
     }

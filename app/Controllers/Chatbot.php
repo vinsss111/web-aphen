@@ -7,7 +7,7 @@ class Chatbot extends BaseController
     public function index()
     {
         // Terima POST baik dari AJAX biasa maupun fetch tanpa header X-Requested-With.
-        if ($this->request->getMethod() !== 'post') {
+        if (! $this->request->is('post')) {
             return $this->response->setStatusCode(403)->setBody('Akses langsung tidak diizinkan');
         }
 
