@@ -174,9 +174,10 @@
                 </h4>
                 <p class="text-muted small mb-0">Sabtu, 18 April 2026 | Area: Batam</p>
             </div>
+            <?php $session = service('session'); ?>
             <div class="d-flex align-items-center">
                 <div class="text-end me-3 d-none d-md-block">
-                    <h6 class="mb-0 fw-bold"><?= session()->get('nama_lengkap'); ?></h6>
+                    <h6 class="mb-0 fw-bold"><?= $session->get('nama_lengkap'); ?></h6>
                     <small class="text-muted">Administrator</small>
                 </div>
                 <img src="<?= base_url('assets/image/logo.png'); ?>" width="45" height="45" class="rounded-circle border">
@@ -537,6 +538,7 @@
 
     <script src="<?= base_url('assets/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+    <?php $session = service('session'); ?>
 
     <script>
         // Zoom Gambar
@@ -547,8 +549,8 @@
         }
 
         // SweetAlert Notifikasi PHP
-        <?php if(session()->getFlashdata('sukses')): ?>
-            Swal.fire({ icon: 'success', title: 'Berhasil!', text: '<?= session()->getFlashdata('sukses'); ?>', timer: 2000, showConfirmButton: false });
+        <?php if($session->getFlashdata('sukses')): ?>
+            Swal.fire({ icon: 'success', title: 'Berhasil!', text: '<?= $session->getFlashdata('sukses'); ?>', timer: 2000, showConfirmButton: false });
         <?php endif; ?>
 
         // Confirm Hapus

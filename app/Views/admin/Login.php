@@ -141,13 +141,13 @@
 
     <script src="<?= base_url('assets/bootstrap/js/bootstrap.bundle.min.js'); ?>"></script>
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-    
+    <?php $session = service('session'); ?>
     <script>
-        <?php if(session()->getFlashdata('error')): ?>
+        <?php if($session->getFlashdata('error')): ?>
             Swal.fire({
                 icon: 'error',
                 title: 'Login Gagal',
-                text: '<?= session()->getFlashdata('error'); ?>',
+                text: '<?= $session->getFlashdata('error'); ?>',
                 confirmButtonColor: '#dc3545'
             });
         <?php endif; ?>
