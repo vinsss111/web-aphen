@@ -3,12 +3,7 @@
   "name": "web-aphen",
   "functions": {
     "api/index.php": {
-      "runtime": "vercel-php@0.7.1",
-      "config": {
-        "maxDuration": 30,
-        "memory": 1024,
-        "phpVersion": "8.2"
-      }
+      "runtime": "vercel-php@0.7.1"
     }
   },
   "routes": [
