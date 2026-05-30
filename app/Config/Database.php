@@ -27,7 +27,7 @@ class Database extends Config
     public array $default = [
         'DSN'          => '',
         'hostname'     => 'localhost',
-        'username'     => '',
+        'username'     => 'root',
         'password'     => '',
         'database'     => '',
         'DBDriver'     => 'MySQLi',
@@ -37,21 +37,40 @@ class Database extends Config
         'charset'      => 'utf8mb4',
         'DBCollat'     => 'utf8mb4_general_ci',
         'swapPre'      => '',
-        'encrypt' => [
+        'encrypt'      => [
             'ssl_verify_server_cert' => false
         ],
         'compress'     => false,
         'strictOn'     => false,
         'failover'     => [],
-        'port'         => 3306,
+        'port'         => 4000,
         'numberNative' => false,
-        'foundRows'    => false,
-        'dateFormat'   => [
-            'date'     => 'Y-m-d',
-            'datetime' => 'Y-m-d H:i:s',
-            'time'     => 'H:i:s',
-        ],
     ];
+
+    public function __construct()
+    {
+        parent::__construct();
+
+        // Mengisi nilai secara dinamis dari Environment Variables Vercel saat class dimuat
+        if (getenv('DATABASE_DEFAULT_HOSTNAME')) {
+            $this->default['hostname'] = getenv('DATABASE_DEFAULT_HOSTNAME');
+        }
+        if (getenv('DATABASE_DEFAULT_USERNAME')) {
+            $this->default['username'] = getenv('DATABASE_DEFAULT_USERNAME');
+        }
+        if (getenv('DATABASE_DEFAULT_PASSWORD')) {
+            $this->default['password'] = getenv('DATABASE_DEFAULT_PASSWORD');
+        }
+        if (getenv('DATABASE_DEFAULT_DATABASE')) {
+            $this->default['database'] = getenv('DATABASE_DEFAULT_DATABASE');
+        }
+        if (getenv('DATABASE_DEFAULT_DBDRIVER')) {
+            $this->default['DBDriver'] = getenv('DATABASE_DEFAULT_DBDRIVER');
+        }
+        if (getenv('DATABASE_DEFAULT_DBPORT')) {
+            $this->default['port'] = (int) getenv('DATABASE_DEFAULT_DBPORT');
+        }
+    }
 
     //    /**
     //     * Sample database connection for SQLite3.
@@ -192,15 +211,4 @@ class Database extends Config
         ],
     ];
 
-    public function __construct()
-    {
-        parent::__construct();
-
-        // Ensure that we always set the database group to 'tests' if
-        // we are currently running an automated test suite, so that
-        // we don't overwrite live data on accident.
-        if (ENVIRONMENT === 'testing') {
-            $this->defaultGroup = 'tests';
-        }
-    }
 }
