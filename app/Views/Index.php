@@ -453,9 +453,11 @@
                 method: 'POST',
                 headers: { 
                     'Content-Type': 'application/x-www-form-urlencoded',
+                    'Accept': 'application/json',
                     'X-Requested-With': 'XMLHttpRequest',
                     'X-CSRF-TOKEN': getCookie('csrf_cookie_name') || ''
                 },
+                credentials: 'same-origin',
                 // Mengirim data dengan format x-www-form-urlencoded agar terbaca oleh getPost() di CI4
                 body: 'pesan=' + encodeURIComponent(pesan)
             });
@@ -657,7 +659,12 @@
 
         fetch('<?= base_url("index/checkout"); ?>', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json', 'X-CSRF-TOKEN': getCookie('csrf_cookie_name') || '' },
+            headers: {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-CSRF-TOKEN': getCookie('csrf_cookie_name') || ''
+            },
+            credentials: 'same-origin',
             body: JSON.stringify(checkoutData)
         })
         .then(response => response.json())

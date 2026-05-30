@@ -11,6 +11,7 @@ class Login extends BaseController
 
     public function __construct()
     {
+        helper('form');
         $this->authModel = new AuthModel();
         $this->session   = service('session'); // Inisialisasi Session Service CI4
     }
