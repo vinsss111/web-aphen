@@ -52,26 +52,4 @@ class Index extends BaseController
         }
     }
 
-    public function chatbot_proxy()
-    {
-        $response = service('response');
-        $response->setContentType('application/json');
-
-        // Mengambil URL Python dari Environment Variable (Aman, tidak bocor ke GitHub)
-        $python_server_url = env('PYTHON_CHATBOT_URL') ?? 'http://localhost:5000/chat'; 
-
-        $pesan_user = $this->request->getPost('pesan');
-
-        // Mengirimkan request dari server CI4 ke server Python via cURL
-        $ch = curl_init($python_server_url);
-        curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-        curl_setopt($ch, CURLOPT_POST, true);
-        curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode(['pesan' => $pesan_user]));
-        curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/json']);
-
-        $result = curl_exec($ch);
-        curl_close($ch);
-
-        return $response->setBody($result);
-    }
 }
