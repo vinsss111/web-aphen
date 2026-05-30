@@ -37,9 +37,8 @@ class Database extends Config
         'charset'      => 'utf8mb4',
         'DBCollat'     => 'utf8mb4_general_ci',
         'swapPre'      => '',
-        'encrypt'      => [
-            'ssl_ca' => APPPATH . 'Config/isrgrootx1.pem',
-            'ssl_verify_server_cert' => true
+        'encrypt' => [
+            'ssl_verify_server_cert' => false
         ],
         'compress'     => false,
         'strictOn'     => false,
